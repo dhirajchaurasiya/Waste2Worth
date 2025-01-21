@@ -12,8 +12,8 @@ class SellerMap extends StatefulWidget {
 }
 
 class _SellerMapState extends State<SellerMap> {
-
-  Position? _currentPosition;
+  Position? _currentPosition; // User's current location
+  bool _isLoading = true; // Loading state
 
   @override
   void initState() {
@@ -21,64 +21,76 @@ class _SellerMapState extends State<SellerMap> {
     _getCurrentLocation(); // Automatically fetch the location when the app starts
   }
 
-    // Fetch the current location of the user
-  _getCurrentLocation() async{
-    await Geolocator
-      .getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
-      .then((Position position) {
-        setState(() {
-          _currentPosition = position;
-          print(_currentPosition);
-        });
-      }).catchError((e) {
-        print(e); 
+  // Fetch the current location of the user
+  _getCurrentLocation() async {
+    await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+      forceAndroidLocationManager: true,
+    ).then((Position position) {
+      setState(() {
+        _currentPosition = position;
+        _isLoading = false; // Stop loading once location is fetched
       });
+    }).catchError((e) {
+      print("Error fetching location: $e");
+      setState(() {
+        _isLoading = false; // Stop loading even if there's an error
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Compost Sellers Map'),),
-      body: FlutterMap(
+        title: Text('Compost Sellers Map'),
+      ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(), // Show loading spinner
+            )
+          : FlutterMap(
               options: MapOptions(
-                initialCenter:
-                    LatLng(51.509364, -0.128928), // Center the map over London
-                initialZoom: 9.2,
+                initialCenter: _currentPosition != null
+                    ? LatLng(_currentPosition!.latitude, _currentPosition!.longitude)
+                    : LatLng(51.509364, -0.128928), // Default to London if location is null
+                initialZoom: 13.0,
               ),
               children: [
                 TileLayer(
-                  // Display map tiles from any source
-                  urlTemplate:
-                      'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // OSMF's Tile Server
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   userAgentPackageName: 'com.example.fireflutter',
-                  // And many more recommended properties!
+                ),
+                MarkerLayer(
+                  markers: [
+                    if (_currentPosition != null)
+                      Marker(
+                        width: 80.0,
+                        height: 80.0,
+                        point: LatLng(
+                          _currentPosition!.latitude,
+                          _currentPosition!.longitude,
+                        ),
+                        child:  Icon(
+                          Icons.location_on,
+                          color: Colors.red,
+                          size: 50.0,
+                        ),
+                      ),
+                  ],
                 ),
                 RichAttributionWidget(
-                  // Include a stylish prebuilt attribution widget that meets all requirments
                   attributions: [
                     TextSourceAttribution(
                       'OpenStreetMap contributors',
-                      onTap: () => launchUrl(Uri.parse(
-                          'https://openstreetmap.org/copyright')), // (external)
+                      onTap: () => launchUrl(
+                        Uri.parse('https://openstreetmap.org/copyright'),
+                      ),
                     ),
-                    // Also add images...
                   ],
                 ),
-                
-              if (_currentPosition != null) Text(
-              "LAT: ${_currentPosition!.latitude}, LNG: ${_currentPosition!.longitude}"
-            ),
-            TextButton(
-              child: Text("Get location"),
-              onPressed: () {
-                _getCurrentLocation();
-              },
-            ),
               ],
             ),
     );
   }
 }
-
-// ADDED OSM MAP TO THE PROJECT. NEED TO FIND THE EXACT LOCATION OF THE USER. AND THEN ADD MARKERS TO THE MAP. THAT'S ALL I GUESS
