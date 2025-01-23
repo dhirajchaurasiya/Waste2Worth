@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "288220901292",
+    "project_id": "fireflutter-f6132",
+    "storage_bucket": "fireflutter-f6132.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288220901292:android:3f3915823dba76a704d409",
+        "android_client_info": {
+          "package_name": "com.example.fireflutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCksaU-WSuwxfxg7loQwYUov-gMspz-3XQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

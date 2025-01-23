@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:fireflutter/sellers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 import 'package:fireflutter/models/sellmodels.dart';
+import 'package:fireflutter/sellers_screen.dart';
 
 class BuyerSellerScreen extends StatefulWidget {
   @override
@@ -29,13 +30,15 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
     ),
     const Marker(
       point: LatLng(51.51452, -0.128928), // Another location
-      child: Icon(
+      child:  Icon(
         Icons.location_pin,
         color: Colors.red,
         size: 40,
       ),
     ),
   ];
+
+  
 
   @override
   void dispose() {
@@ -44,6 +47,9 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
     _phoneController.dispose();
     super.dispose();
   }
+
+  // Fetch the current location of the user
+  
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +61,7 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
+        child:  Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Form Header
@@ -75,17 +81,7 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
               ),
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 16),
-
-            // Address Input
-            TextField(
-              controller: _addressController,
-              decoration: InputDecoration(
-                labelText: 'Address',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.location_on),
-              ),
-            ),
+            
             SizedBox(height: 16),
 
             // Phone Number Input
@@ -138,10 +134,11 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
                   _addressController.clear();
                   _phoneController.clear();
                 },
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ),
-            SizedBox(height: 32),
+
+            const SizedBox(height: 32),
 
             // Map Header
             Row(
@@ -155,7 +152,7 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SellerMap()));
+                            builder: (context) =>    SellerMap()),);
                     print('Icon btn to see full screen location pressed');
                   },
                   icon: const Icon(Icons.arrow_right),
@@ -165,41 +162,15 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
             ),
             const SizedBox(height: 16),
 
-            // OpenStreetMap Integration
-            Container(
-              height: 300,
-              child: FlutterMap(
-                options: const MapOptions(
-                  initialCenter: LatLng(
-                      51.509364, -0.128928), // Center the map over London
-                  initialZoom: 9.2,
-                ),
-                children: [
-                  TileLayer(
-                    // Display map tiles from any source
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // OSMF's Tile Server
-                    userAgentPackageName: 'com.example.fireflutter',
-                    // And many more recommended properties!
-                  ),
-                  RichAttributionWidget(
-                    // Include a stylish prebuilt attribution widget that meets all requirments
-                    attributions: [
-                      TextSourceAttribution(
-                        'OpenStreetMap contributors',
-                        onTap: () => launchUrl(Uri.parse(
-                            'https://openstreetmap.org/copyright')), // (external)
-                      ),
-                      // Also add images...
-                    ],
-                  ),
-                  MarkerLayer(markers: _markers),
-                ],
-              ),
-            ),
+            
+            
           ],
         ),
       ),
     );
   }
 }
+
+
+//zoom in the map
+//done with adding the sales data to the backend

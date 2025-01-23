@@ -1,3 +1,4 @@
+import 'package:fireflutter/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -28,7 +29,7 @@ class _SellerMapState extends State<SellerMap> {
       forceAndroidLocationManager: true,
     ).then((Position position) {
       setState(() {
-        _currentPosition = position;
+        currentLocation = position;
         _isLoading = false; // Stop loading once location is fetched
       });
     }).catchError((e) {
@@ -51,8 +52,8 @@ class _SellerMapState extends State<SellerMap> {
             )
           : FlutterMap(
               options: MapOptions(
-                initialCenter: _currentPosition != null
-                    ? LatLng(_currentPosition!.latitude, _currentPosition!.longitude)
+                initialCenter: currentLocation != null
+                    ? LatLng(currentLocation!.latitude, currentLocation!.longitude)
                     : LatLng(51.509364, -0.128928), // Default to London if location is null
                 initialZoom: 13.0,
               ),
@@ -63,13 +64,13 @@ class _SellerMapState extends State<SellerMap> {
                 ),
                 MarkerLayer(
                   markers: [
-                    if (_currentPosition != null)
+                    if (currentLocation != null)
                       Marker(
                         width: 80.0,
                         height: 80.0,
                         point: LatLng(
-                          _currentPosition!.latitude,
-                          _currentPosition!.longitude,
+                          currentLocation!.latitude,
+                          currentLocation!.longitude,
                         ),
                         child:  Icon(
                           Icons.location_on,
