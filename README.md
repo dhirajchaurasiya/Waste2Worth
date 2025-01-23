@@ -27,7 +27,7 @@ An IoT-based smart composting solution designed to transform food waste into val
 ---
 
 ## 📊 Screenshots
-_Add screenshots of the app to showcase its UI/UX (e.g., dashboard, map, marketplace)._ 
+Screenshots of the app to showcase its UI/UX (e.g., dashboard, map, marketplace)._ 
 
 ---
 
