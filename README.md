@@ -128,7 +128,7 @@ For queries, reach out at: **dhirajkrchaurasiya@gmail.com**
 
 ## 👫 Authors
 
-- **Your Name** - [Dhiraj Chaurasiya](https://github.com/dhirajchaurasiya)
+- [Dhiraj Chaurasiya](https://github.com/dhirajchaurasiya)
 - Collaboratrs will appear here!
 
 ---
