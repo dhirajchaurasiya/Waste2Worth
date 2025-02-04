@@ -42,99 +42,101 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Center(
-          child: Form(
-            key: userform,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Image.asset("assets/images/logo.png"),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: email,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Email is required";
-                      }
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: password,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Password is required";
-                      }
-                    },
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: Size(0, 50),
-                            backgroundColor: const Color.fromARGB(255, 38, 106, 40),
-                          ),
-                            onPressed: () async{
-                              if (userform.currentState!.validate()) {
-                        
-                                isloading = true;
-                                setState(() {
-                                  
-                                });
-                                await LoginController.login(
-                                    context: context,
-                                    email: email.text,
-                                    password: password.text);
-                        
-                                isloading = false;
-                                setState(() {
-                                  
-                                });
-                              }
-                            },
-                            child: isloading ? CircularProgressIndicator(
-                              color: Colors.white,
-                            ) : Text('Login')),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Text("Don't have an account?"),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return SignupScreen();
-                            },
-                          ),
-                        );
+        body: SingleChildScrollView(
+          child: Center(
+            child: Form(
+              key: userform,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Image.asset("assets/images/logo.png"),
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: email,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Email is required";
+                        }
                       },
-                      child: Text("Sign up"),
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                      ),
                     ),
-                  ])
-                ],
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: password,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Password is required";
+                        }
+                      },
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(0, 50),
+                              backgroundColor: const Color.fromARGB(255, 38, 106, 40),
+                            ),
+                              onPressed: () async{
+                                if (userform.currentState!.validate()) {
+                          
+                                  isloading = true;
+                                  setState(() {
+                                    
+                                  });
+                                  await LoginController.login(
+                                      context: context,
+                                      email: email.text,
+                                      password: password.text);
+                          
+                                  isloading = false;
+                                  setState(() {
+                                    
+                                  });
+                                }
+                              },
+                              child: isloading ? CircularProgressIndicator(
+                                color: Colors.white,
+                              ) : Text('Login')),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Text("Don't have an account?"),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return SignupScreen();
+                              },
+                            ),
+                          );
+                        },
+                        child: Text("Sign up"),
+                      ),
+                    ])
+                  ],
+                ),
               ),
             ),
           ),
