@@ -43,6 +43,7 @@ dependencies:
   geolocator: ^13.0.2
   cloud_firestore: ^5.6.1
   firebase_auth: ^5.4.1
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
