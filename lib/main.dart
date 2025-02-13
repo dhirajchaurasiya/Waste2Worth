@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fireflutter/screens/splashscreen.dart';
+import 'package:fireflutter/widgets/homescreen.dart';
 import 'package:flutter/material.dart'; 
 import 'package:fireflutter/firebase_options.dart';
-import 'package:fireflutter/dashboard.dart';
+import 'package:fireflutter/screens/dashboard.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,13 +19,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Waste2Worth',
       theme: ThemeData(
 
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
         useMaterial3: true,
       ),
-      home: DashboardScreen(),
+      home: HomeScreen(),
     );
   }
 }
