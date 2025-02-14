@@ -15,29 +15,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
-
-  // Map<String, dynamic>? userdata = {};
-
-  // var db = FirebaseFirestore.instance;
-  // var authUser = FirebaseAuth.instance.currentUser;
-
-  // void getdata(){
-  //   db.collection("users").doc(authUser!.uid).get().then((value) {
-  //     userdata = value.data();
-  //     setState(() {
-        
-  //     });
-  //   });
-  // }
-
-  // @override
-  // void initState() {
-  //   getdata();
-  //   // TODO: implement initState
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
  
@@ -79,7 +56,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                     ),
                   );
-                  print(userprovider.userName);
                 },
                 child: Text("Edit profile")),
 
