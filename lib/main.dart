@@ -1,14 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fireflutter/providers/userprovider.dart';
 import 'package:fireflutter/screens/splashscreen.dart';
 import 'package:fireflutter/widgets/homescreen.dart';
 import 'package:flutter/material.dart'; 
 import 'package:fireflutter/firebase_options.dart';
 import 'package:fireflutter/screens/dashboard.dart';
+import 'package:provider/provider.dart';
 
-void main() async{
+Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+create: (context) => Userprovider(),
+child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,7 +29,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
         useMaterial3: true,
       ),
-      home: HomeScreen(),
+      home: SplashScreen(),
     );
   }
 }
