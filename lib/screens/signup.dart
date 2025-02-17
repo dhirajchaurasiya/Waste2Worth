@@ -53,7 +53,7 @@ class _SignupScreenState extends State<SignupScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Image.asset('assets/images/logo.png'),
+                Image.asset('assets/images/logo.png', width: 200, height: 200,),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: email,
@@ -80,7 +80,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: InputDecoration(
                     labelText: 'Password',),
                 ),
-                
+                SizedBox(height: 20,),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: name,
@@ -92,12 +92,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: InputDecoration(
                     labelText: 'Name',),
                 ),
+                SizedBox(height: 20,),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: country,
                   validator: (value) {
                     if (value==null || value.isEmpty) {
-                      return "country is required";
+                      return "Country is required";
                     }
                   },
                   decoration: InputDecoration(
