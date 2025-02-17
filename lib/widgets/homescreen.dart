@@ -1,6 +1,7 @@
 import 'package:fireflutter/screens/dashboard.dart';
 import 'package:fireflutter/screens/profile.dart';
 import 'package:fireflutter/screens/seller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
@@ -44,11 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(CupertinoIcons.house_fill),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.woo_commerce),
+            icon: Icon(CupertinoIcons.cart_fill),
             label: 'Buy/Sell',
           ),
           BottomNavigationBarItem(
