@@ -17,6 +17,7 @@ class SignupController {
           .createUserWithEmailAndPassword(email: email, password: password);
       print("Account created");
 
+    //to get the current user
       var userid = FirebaseAuth.instance.currentUser!.uid;
 
     var db = FirebaseFirestore.instance;

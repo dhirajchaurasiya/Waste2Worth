@@ -131,7 +131,7 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
                   
                   //clearing the textfields
                   _weightController.clear();
-                  _addressController.clear();
+                  _addressController.clear();   
                   _phoneController.clear();
                 },
                 child: const Text('Submit'),
