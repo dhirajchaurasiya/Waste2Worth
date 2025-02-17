@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fireflutter/providers/userprovider.dart';
+import 'package:fireflutter/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:fireflutter/screens/seller.dart';
-import 'package:geolocator/geolocator.dart'; // Import the BuyerSellerInterface screen
+import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart'; // Import the BuyerSellerInterface screen
 
 
 
@@ -13,25 +18,28 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   // Position? _currentPosition;
-
+  
+  var user = FirebaseAuth.instance.currentUser;
+  var db = FirebaseFirestore.instance;
   
 
   @override
   
 
   Widget build(BuildContext context) {
+
+      var userprovider = Provider.of<Userprovider>(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Welcome to Waste2Worth'),
-        centerTitle: true,
-      ),
+      
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
+          child: Column(  
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Welcome Header
+              Text('Welcome ${userprovider.userName}!'),
               Text(
                 'Current Compost Status',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
