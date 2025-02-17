@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fireflutter/controllers/login_controllers.dart';
+import 'package:fireflutter/providers/userprovider.dart';
 import 'package:fireflutter/screens/dashboard.dart';
 import 'package:fireflutter/screens/signup.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -23,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email.text, password: password.text);
-      print("Account created");
+      print("Account logged in");
 
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
         builder: (context) {
@@ -40,6 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var userinfo = Provider.of<Userprovider>(context);
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -50,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Image.asset("assets/images/logo.png"),
+                    Image.asset("assets/images/logo.png", width: 200, height: 200,),
                     TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: email,
@@ -109,10 +113,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                     
                                   });
                                 }
+                                print(userinfo.userName);
                               },
                               child: isloading ? CircularProgressIndicator(
                                 color: Colors.white,
-                              ) : Text('Login')),
+                              ) : Text('Login', style: TextStyle(color: Colors.white),)),
                         ),
                       ],
                     ),
