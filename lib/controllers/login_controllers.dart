@@ -8,7 +8,7 @@ class LoginController {
   static Future<void> login( {required BuildContext context,required email, required password}) async{
     try{
     await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-    print("Account created");
+    print("Account logged in");
 
     Navigator.pushAndRemoveUntil(
       context,
