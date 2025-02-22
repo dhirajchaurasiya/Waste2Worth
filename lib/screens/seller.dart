@@ -55,8 +55,8 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green[400],
-        title: Text('Sell Compost Manure'),
+        backgroundColor: Colors.green,
+        title: Text('Sell Compost Manure', style: TextStyle(color: Colors.white),),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -99,9 +99,13 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
             // Submit Button
             Center(
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                              minimumSize: Size(0, 50),
+                              backgroundColor: Colors.green,
+                              foregroundColor: Colors.white,
+                            ),
                 onPressed: () async {
                   if (_weightController.text.isEmpty ||
-                      _addressController.text.isEmpty ||
                       _phoneController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Please fill in all fields!')),
@@ -113,7 +117,7 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
                   final newsale = sellmodel(
                       id: DateTime.now().toString(),
                       weight: _weightController.text,
-                      address: _addressController.text,
+                      // address: _addressController.text,
                       phonenumber: _phoneController.text);
                   
                   //add data to the firebase
@@ -131,7 +135,7 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
                   
                   //clearing the textfields
                   _weightController.clear();
-                  _addressController.clear();   
+                  // _addressController.clear();   
                   _phoneController.clear();
                 },
                 child: const Text('Submit'),
