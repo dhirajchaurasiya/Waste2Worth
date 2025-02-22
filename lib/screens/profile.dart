@@ -47,6 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             Text(userprovider.userEmail),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green, foregroundColor: Colors.white),
                 onPressed: () {
                   Navigator.push(
                     context,

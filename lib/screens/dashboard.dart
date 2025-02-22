@@ -113,38 +113,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ],
                 ),
               ),
-        
-              SizedBox(height: 32),
-        
-              // Navigate to Buyer-Seller Interface
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BuyerSellerScreen()),
-                    );
-                  },
-                  child: Text('Go to Buyer-Seller Interface'),
-                ),
-              ),
-        
-              SizedBox(height: 16),
-        
-              // Navigate to Buyer Map Interface
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BuyerMapScreen()),
-                    );
-                  },
-                  child: Text('View Compost Sellers Map'),
-                ),
-              ),
-
-              
               // Center(
               //   child: ElevatedButton(
               //     onPressed: () {
