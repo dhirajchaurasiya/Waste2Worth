@@ -4,7 +4,6 @@ import 'package:fireflutter/screens/seller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -31,7 +30,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Waste2Worth'),
+        backgroundColor: Colors.green,
+        leading: Container(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset(
+            "assets/images/logo.png",
+            width: 50,
+            height: 50,
+            color: Colors.white,
+          ),
+        ),
+        title: Text(
+          'Waste2Worth',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: PageView(
         controller: _pageController,
@@ -61,6 +73,19 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.green[100],
         onTap: _onItemTapped,
+      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
+        child: Image.asset(
+          "assets/images/buy_me_a_coffee.png",
+          width: 30,
+          height: 30,
+        ),
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => DashboardScreen()));
+        },
       ),
     );
   }
