@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fireflutter/providers/userprovider.dart';
+import 'package:fireflutter/widgets/locationPicker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,6 +9,7 @@ import 'package:latlong2/latlong.dart';
 // import 'package:url_launcher/url_launcher.dart';
 import 'package:fireflutter/models/sellmodels.dart';
 import 'package:fireflutter/screens/sellers_screen.dart';
+import 'package:provider/provider.dart';
 
 class BuyerSellerScreen extends StatefulWidget {
   @override
@@ -14,6 +17,8 @@ class BuyerSellerScreen extends StatefulWidget {
 }
 
 class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
+  LatLng? _selectedLocation;
+
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -30,15 +35,13 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
     ),
     const Marker(
       point: LatLng(51.51452, -0.128928), // Another location
-      child:  Icon(
+      child: Icon(
         Icons.location_pin,
         color: Colors.red,
         size: 40,
       ),
     ),
   ];
-
-  
 
   @override
   void dispose() {
@@ -49,19 +52,23 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
   }
 
   // Fetch the current location of the user
-  
 
   @override
   Widget build(BuildContext context) {
+    var userprovider = Provider.of<Userprovider>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Sell Compost Manure', style: TextStyle(color: Colors.white),),
+        title: Text(
+          'Sell Compost Manure',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child:  Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Form Header
@@ -81,65 +88,124 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
               ),
               keyboardType: TextInputType.number,
             ),
-            
-            SizedBox(height: 16),
+
+            const SizedBox(height: 16),
 
             // Phone Number Input
             TextField(
               controller: _phoneController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Phone Number',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.phone),
               ),
               keyboardType: TextInputType.phone,
             ),
-            SizedBox(height: 24),
 
-            // Submit Button
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                              minimumSize: Size(0, 50),
-                              backgroundColor: Colors.green,
-                              foregroundColor: Colors.white,
-                            ),
-                onPressed: () async {
-                  if (_weightController.text.isEmpty ||
-                      _phoneController.text.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Please fill in all fields!')),
-                    );
-                    return;
-                  }
-
-                  /// create new object of model (making sure kun field ma kasto value janxa - controller le dekhayejsto)
-                  final newsale = sellmodel(
-                      id: DateTime.now().toString(),
-                      weight: _weightController.text,
-                      // address: _addressController.text,
-                      phonenumber: _phoneController.text);
-                  
-                  //add data to the firebase
-                  await FirebaseFirestore.instance
-                      .collection('salesdetails')
-                      .add(newsale.toJson());
-
-                  print('Weight: ${_weightController.text} kg');
-                  print('Address: ${_addressController.text}');
-                  print('Phone: ${_phoneController.text}');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text('Your details have been submitted.')),
-                  );
-                  
-                  //clearing the textfields
-                  _weightController.clear();
-                  // _addressController.clear();   
-                  _phoneController.clear();
-                },
-                child: const Text('Submit'),
+            const SizedBox(
+              height: 16,
+            ),
+            if (_selectedLocation != null)
+              Container(
+                color: Colors.green[200],
+                height: 50,
+                width: double.infinity,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Selected Location: ${_selectedLocation?.latitude}, ${_selectedLocation?.longitude}',
+                    ),
+                  ),
+                ),
               ),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: Size(0, 50),
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white),
+                  onPressed: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LocationPicker(),
+                      ),
+                    );
+                    if (result != null) {
+                      setState(() {
+                        _selectedLocation = result;
+                      });
+                    }
+                  },
+                  child: Text(
+                    'Pick Location',
+                  ),
+                ),
+                SizedBox(width: 24),
+
+                // Submit Button
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(0, 50),
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () async {
+                    if (_weightController.text.isEmpty ||
+                        _selectedLocation == null ||
+                        _phoneController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Please fill in all fields!'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      return;
+                    }
+
+                    /// create new object of model (making sure kun field ma kasto value janxa - controller le dekhayejsto)
+                    final newsale = sellmodel(
+                        id: DateTime.now().toString(),
+                        weight: _weightController.text,
+                        lat: _selectedLocation!.latitude,
+                        long: _selectedLocation!.longitude,
+                        email: userprovider.userEmail,
+                        name: userprovider.userName,
+                        phonenumber: _phoneController.text);
+
+                    //add data to the firebase
+                    await FirebaseFirestore.instance
+                        .collection('salesdetails')
+                        .add(newsale.toJson());
+
+                    print('Weight: ${_weightController.text} kg');
+                    print('Address: ${_addressController.text}');
+                    print('Location: ${_selectedLocation}');
+                    print('Phone: ${_phoneController.text}');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          backgroundColor: Colors.green,
+                          content: Text(
+                            'Your details have been submitted.',
+                            style: TextStyle(color: Colors.white),
+                          )),
+                    );
+
+                    FirebaseFirestore.instance.collection('salesdetails').get();
+
+                    //clearing the textfields
+                    _weightController.clear();
+                    _selectedLocation = null;
+                    setState(() {});
+                    // _addressController.clear();
+                    _phoneController.clear();
+                  },
+                  child: const Text('Submit'),
+                ),
+              ],
             ),
 
             const SizedBox(height: 32),
@@ -154,9 +220,9 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
                 IconButton(
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>    SellerMap()),);
+                      context,
+                      MaterialPageRoute(builder: (context) => SellerMap()),
+                    );
                     print('Icon btn to see full screen location pressed');
                   },
                   icon: const Icon(Icons.arrow_right),
@@ -165,9 +231,6 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
               ],
             ),
             const SizedBox(height: 16),
-
-            
-            
           ],
         ),
       ),
@@ -175,6 +238,4 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
   }
 }
 
-
 //zoom in the map
-//done with adding the sales data to the backend
