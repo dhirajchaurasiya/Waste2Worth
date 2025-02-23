@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     DashboardScreen(),
     BuyerSellerScreen(),
-    ProfileScreen(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
