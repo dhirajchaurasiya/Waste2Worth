@@ -120,92 +120,97 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
                 ),
               ),
             SizedBox(height: 20),
-            Row(
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: Size(0, 50),
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white),
-                  onPressed: () async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LocationPicker(),
-                      ),
-                    );
-                    if (result != null) {
-                      setState(() {
-                        _selectedLocation = result;
-                      });
-                    }
-                  },
-                  child: Text(
-                    'Pick Location',
-                  ),
-                ),
-                SizedBox(width: 24),
-
-                // Submit Button
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(0, 50),
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: () async {
-                    if (_weightController.text.isEmpty ||
-                        _selectedLocation == null ||
-                        _phoneController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Please fill in all fields!'),
-                          backgroundColor: Colors.green,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: Size(0, 50),
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white),
+                    onPressed: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LocationPicker(),
                         ),
                       );
-                      return;
-                    }
+                      if (result != null) {
+                        setState(() {
+                          _selectedLocation = result;
+                        });
+                      }
+                    },
+                    child: Text(
+                      'Pick Location',
+                    ),
+                  ),
+                  SizedBox(width: 24),
 
-                    /// create new object of model (making sure kun field ma kasto value janxa - controller le dekhayejsto)
-                    final newsale = sellmodel(
-                        id: DateTime.now().toString(),
-                        weight: _weightController.text,
-                        lat: _selectedLocation!.latitude,
-                        long: _selectedLocation!.longitude,
-                        email: userprovider.userEmail,
-                        name: userprovider.userName,
-                        phonenumber: _phoneController.text);
+                  // Submit Button
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(0, 50),
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () async {
+                      if (_weightController.text.isEmpty ||
+                          _selectedLocation == null ||
+                          _phoneController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Please fill in all fields!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        return;
+                      }
 
-                    //add data to the firebase
-                    await FirebaseFirestore.instance
-                        .collection('salesdetails')
-                        .add(newsale.toJson());
+                      /// create new object of model (making sure kun field ma kasto value janxa - controller le dekhayejsto)
+                      final newsale = sellmodel(
+                          id: DateTime.now().toString(),
+                          weight: _weightController.text,
+                          lat: _selectedLocation!.latitude,
+                          long: _selectedLocation!.longitude,
+                          email: userprovider.userEmail,
+                          name: userprovider.userName,
+                          phonenumber: _phoneController.text);
 
-                    print('Weight: ${_weightController.text} kg');
-                    print('Address: ${_addressController.text}');
-                    print('Location: ${_selectedLocation}');
-                    print('Phone: ${_phoneController.text}');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          backgroundColor: Colors.green,
-                          content: Text(
-                            'Your details have been submitted.',
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    );
+                      //add data to the firebase
+                      await FirebaseFirestore.instance
+                          .collection('salesdetails')
+                          .add(newsale.toJson());
 
-                    FirebaseFirestore.instance.collection('salesdetails').get();
+                      print('Weight: ${_weightController.text} kg');
+                      print('Address: ${_addressController.text}');
+                      print('Location: ${_selectedLocation}');
+                      print('Phone: ${_phoneController.text}');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Text(
+                              'Your details have been submitted.',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                      );
 
-                    //clearing the textfields
-                    _weightController.clear();
-                    _selectedLocation = null;
-                    setState(() {});
-                    // _addressController.clear();
-                    _phoneController.clear();
-                  },
-                  child: const Text('Submit'),
-                ),
-              ],
+                      FirebaseFirestore.instance
+                          .collection('salesdetails')
+                          .get();
+
+                      //clearing the textfields
+                      _weightController.clear();
+                      _selectedLocation = null;
+                      setState(() {});
+                      // _addressController.clear();
+                      _phoneController.clear();
+                    },
+                    child: const Text('Submit'),
+                  ),
+                ],
+              ),
             ),
 
             const SizedBox(height: 32),
