@@ -7,35 +7,26 @@ import 'package:fireflutter/screens/seller.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart'; // Import the BuyerSellerInterface screen
 
-
-
-
 class DashboardScreen extends StatefulWidget {
-
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
   // Position? _currentPosition;
-  
+
   var user = FirebaseAuth.instance.currentUser;
   var db = FirebaseFirestore.instance;
-  
 
   @override
-  
-
   Widget build(BuildContext context) {
-
-      var userprovider = Provider.of<Userprovider>(context);
+    var userprovider = Provider.of<Userprovider>(context);
 
     return Scaffold(
-      
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(  
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Welcome Header
@@ -46,7 +37,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 16),
-        
+
               // Sensor Data Widgets
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -83,9 +74,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ],
               ),
-        
+
               SizedBox(height: 32),
-        
+
               // Tips Container
               Container(
                 padding: EdgeInsets.all(16),
@@ -105,11 +96,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                     SizedBox(height: 8),
-                    Text('1. Maintain temperature between 35-50°C for optimal decomposition.'),
+                    Text(
+                        '1. Maintain temperature between 35-50°C for optimal decomposition.'),
                     Text('2. Ensure humidity stays between 40-60%.'),
                     Text('3. Regularly mix the compost to keep it aerated.'),
-                    Text('4. Add a thin membrane of soil daily to prevent odor.'),
-                    Text('5. Include dry leaves or sawdust for proper carbon-to-nitrogen balance.'),
+                    Text(
+                        '4. Add a thin membrane of soil daily to prevent odor.'),
+                    Text(
+                        '5. Include dry leaves or sawdust for proper carbon-to-nitrogen balance.'),
                   ],
                 ),
               ),
@@ -130,7 +124,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
     );
-    
   }
   // _getCurrentLocation() {
   //   Geolocator
@@ -141,13 +134,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   //         print(_currentPosition);
   //       });
   //     }).catchError((e) {
-  //       print(e); 
+  //       print(e);
   //     });
   // }
 }
-
-
-
 
 class SensorWidget extends StatelessWidget {
   final String title;
@@ -208,14 +198,19 @@ class BuyerMapScreen extends StatelessWidget {
       body: Center(
         child: Stack(
           children: [
-            Image.network('https://www.mapz.com/stadtplan/image/kathmandu_multicolor.png', height: double.infinity, width: double.infinity,),
+            Image.network(
+              'https://www.mapz.com/stadtplan/image/kathmandu_multicolor.png',
+              height: double.infinity,
+              width: double.infinity,
+            ),
             Positioned(
               top: 150,
               left: 100,
               child: IconButton(
                 icon: Icon(Icons.location_pin, color: Colors.red, size: 40),
                 onPressed: () {
-                  _showSellerDetails(context, 'Seller 1', 'Location: Area A\nPhone: 1234567890');
+                  _showSellerDetails(context, 'Seller 1',
+                      'Location: Area A\nPhone: 1234567890');
                 },
               ),
             ),
@@ -225,7 +220,8 @@ class BuyerMapScreen extends StatelessWidget {
               child: IconButton(
                 icon: Icon(Icons.location_pin, color: Colors.red, size: 40),
                 onPressed: () {
-                  _showSellerDetails(context, 'Seller 2', 'Location: Area B\nPhone: 0987654321');
+                  _showSellerDetails(context, 'Seller 2',
+                      'Location: Area B\nPhone: 0987654321');
                 },
               ),
             ),
@@ -235,7 +231,8 @@ class BuyerMapScreen extends StatelessWidget {
     );
   }
 
-  void _showSellerDetails(BuildContext context, String sellerName, String details) {
+  void _showSellerDetails(
+      BuildContext context, String sellerName, String details) {
     showDialog(
       context: context,
       builder: (context) {

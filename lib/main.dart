@@ -1,24 +1,26 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fireflutter/providers/userprovider.dart';
 import 'package:fireflutter/screens/splashscreen.dart';
-import 'package:fireflutter/widgets/homescreen.dart';
-import 'package:flutter/material.dart'; 
+import 'package:fireflutter/widgets/locationPicker.dart';
+import 'package:fireflutter/widgets/HomeScreen.dart';
+import 'package:flutter/material.dart';
 import 'package:fireflutter/firebase_options.dart';
 import 'package:fireflutter/screens/dashboard.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
-Future<void> main() async{
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ChangeNotifierProvider(
-create: (context) => Userprovider(),
-child: MyApp()));
+    create: (context) => Userprovider(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,57 +36,48 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key, required this.title});
-
-//   final String title;
-
+// class MyHomeScreen extends StatefulWidget {
 //   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
+//   _MyHomeScreenState createState() => _MyHomeScreenState();
 // }
 
-// class _MyHomePageState extends State<MyHomePage> {
-//   int _counter = 0;
-
-//   void _incrementCounter() {
-//     setState(() {
-
-//       _counter++;
-//     });
-//   }
+// class _MyHomeScreenState extends State<MyHomeScreen> {
+//   LatLng? _selectedLocation;
 
 //   @override
 //   Widget build(BuildContext context) {
-
 //     return Scaffold(
 //       appBar: AppBar(
-  
-//         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
- 
-//         title: Text(widget.title),
+//         title: Text('Home'),
 //       ),
 //       body: Center(
-        
-        
 //         child: Column(
-
 //           mainAxisAlignment: MainAxisAlignment.center,
 //           children: <Widget>[
-//             const Text(
-//               'You have pushed the button this many times:',
-//             ),
-//             Text(
-//               '$_counter',
-//               style: Theme.of(context).textTheme.headlineMedium,
+//             if (_selectedLocation != null)
+//               Text(
+//                 'Selected Location: ${_selectedLocation?.latitude}, ${_selectedLocation?.longitude}',
+//               ),
+//             SizedBox(height: 20),
+//             ElevatedButton(
+//               onPressed: () async {
+//                 final result = await Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                     builder: (context) => LocationPicker(),
+//                   ),
+//                 );
+//                 if (result != null) {
+//                   setState(() {
+//                     _selectedLocation = result;
+//                   });
+//                 }
+//               },
+//               child: Text('Pick Location'),
 //             ),
 //           ],
 //         ),
 //       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: _incrementCounter,
-//         tooltip: 'Increment',
-//         child: const Icon(Icons.add),
-//       ), 
 //     );
 //   }
 // }
