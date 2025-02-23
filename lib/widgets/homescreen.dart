@@ -1,3 +1,4 @@
+import 'package:fireflutter/screens/buymecoffee.dart';
 import 'package:fireflutter/screens/dashboard.dart';
 import 'package:fireflutter/screens/profile.dart';
 import 'package:fireflutter/screens/seller.dart';
@@ -83,8 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 30,
         ),
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => DashboardScreen()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Buymecoffee()));
         },
       ),
     );

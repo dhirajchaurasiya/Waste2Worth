@@ -44,6 +44,8 @@ dependencies:
   firebase_auth: ^5.4.1
   provider: ^6.1.2
   geocoding: ^3.0.0
+  esewa_flutter_sdk: 
+    path: ./esewa_sdk/esewa_flutter_sdk
 
 dev_dependencies:
   flutter_test:
