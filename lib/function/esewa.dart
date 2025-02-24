@@ -23,6 +23,7 @@ class Esewa {
         onPaymentSuccess: (EsewaPaymentSuccessResult data) {
           debugPrint(":::SUCCESS::: => $data");
           verify(data);
+          AlertBox();
           // verifyTransactionStatus(data);
         },
         onPaymentFailure: (data) {
@@ -40,5 +41,27 @@ class Esewa {
   verify(EsewaPaymentSuccessResult data) {
     //after success call this function
     print("success");
+    AlertBox();
+    print("calling alert box");
+  }
+}
+
+class AlertBox extends StatefulWidget {
+  const AlertBox({super.key});
+
+  @override
+  State<AlertBox> createState() => _AlertBoxState();
+}
+
+class _AlertBoxState extends State<AlertBox> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      width: 100,
+      child: AlertDialog(
+        title: Text("Success"),
+      ),
+    );
   }
 }
