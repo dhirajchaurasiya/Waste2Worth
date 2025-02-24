@@ -12,6 +12,7 @@ An IoT-based smart composting solution designed to transform food waste into val
 
 2. **Marketplace Integration**:
    - Users can list or purchase compost manure.
+   - Secure **payment integration** via **eSewa** for seamless transactions.
    - Interactive maps show nearby sellers and their details.
 
 3. **Actionable Composting Tips**:
@@ -19,15 +20,18 @@ An IoT-based smart composting solution designed to transform food waste into val
 
 4. **Location Awareness**:
    - Fetches live user location and dynamically updates maps to display sellers near the user.
+   - **Geocoding support** to convert latitude/longitude into readable addresses.
 
 5. **User-Friendly UI**:
    - Clean dashboard to display composting progress and sensor readings.
+   - **Lottie animations** for an enhanced user experience.
    - Seamless navigation between features.
+   - Custom **Poppins font** for better typography and readability.
 
 ---
 
 ## 📊 Screenshots
-Screenshots of the app to showcase its UI/UX (e.g., dashboard, map, marketplace)._ 
+_Add screenshots of the app to showcase its UI/UX (e.g., dashboard, map, marketplace)._ 
 
 ---
 
@@ -37,6 +41,9 @@ Screenshots of the app to showcase its UI/UX (e.g., dashboard, map, marketplace)
 - **Firebase**: Backend services for authentication, database, and notifications.
 - **Geolocator**: To fetch live user location.
 - **OpenStreetMap**: For map integration using the `flutter_map` package.
+- **Geocoding**: Converts coordinates to addresses for better location identification.
+- **eSewa SDK**: Payment integration for compost transactions.
+- **Lottie**: Animated UI elements for improved user experience.
 - **Dart**: Programming language for app logic.
 
 ---
@@ -112,13 +119,8 @@ Screenshots of the app to showcase its UI/UX (e.g., dashboard, map, marketplace)
 - Firebase App Check ensures only verified apps can access backend resources.
 - API keys are restricted by domain and platform to prevent unauthorized usage.
 
-<!-- ---
 
-## 🔒 License
-
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
-
---- -->
+---
 
 ## 📧 Contact
 
@@ -128,11 +130,10 @@ For queries, reach out at: **dhirajkrchaurasiya@gmail.com**
 
 ## 👫 Authors
 
-- [Dhiraj Chaurasiya](https://github.com/dhirajchaurasiya)
-- Collaboratrs will appear here!
+- **Dhiraj Chaurasiya**
+- Collaborators will appear here!
 
 ---
-
 
 ## 📊 Contributing
 
@@ -153,20 +154,8 @@ Contributions are welcome! Please follow these steps:
    ```
 5. Create a pull request on GitHub.
 
+---
 
+## 🎮 Fun Fact
 
-
-
-
-
-
-
-
-
-##### Fun Fact
-This app was initially named FireFlutter locally cause it's created using Flutter and Firebase.
-
-
-
-
-
+This app was initially named **FireFlutter** locally because it's created using **Flutter and Firebase**.
