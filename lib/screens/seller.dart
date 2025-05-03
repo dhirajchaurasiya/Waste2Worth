@@ -216,24 +216,40 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
             const SizedBox(height: 32),
 
             // Map Header
-            Row(
-              children: [
-                const Text(
-                  'Nearby Compost Sellers:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                IconButton(
-                  onPressed: () {
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.lightGreen[100],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SellerMap()),
                     );
-                    print('Icon btn to see full screen location pressed');
                   },
-                  icon: const Icon(Icons.arrow_right),
-                  iconSize: 30,
-                )
-              ],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Icon(Icons.location_on, color: Colors.black),
+                      const Text(
+                        ' Nearby Compost Sellers:',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          print('Icon btn to see full screen location pressed');
+                        },
+                        icon: const Icon(Icons.arrow_right),
+                        iconSize: 30,
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 16),
           ],
