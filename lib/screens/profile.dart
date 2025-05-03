@@ -117,25 +117,26 @@ class _ProfilePageState extends State<ProfilePage> {
           color: Colors.lightGreen[100],
           borderRadius: BorderRadius.circular(8),
         ),
-        child: ListTile(
-          leading: Icon(icon, color: Colors.black),
-          title: Text(
-            title,
-            style: TextStyle(color: Colors.black),
+        child: GestureDetector(
+          onTap: () {
+            if (title == 'My Profile') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EditProfile()),
+              );
+            }
+            if (title == 'Logout') {
+              logout();
+            }
+          },
+          child: ListTile(
+            leading: Icon(icon, color: Colors.black),
+            title: Text(
+              title,
+              style: TextStyle(color: Colors.black),
+            ),
+            trailing: Icon(Icons.chevron_right, color: Colors.black),
           ),
-          trailing: GestureDetector(
-              onTap: () {
-                if (title == 'My Profile') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EditProfile()),
-                  );
-                }
-                if (title == 'Logout') {
-                  logout();
-                }
-              },
-              child: Icon(Icons.chevron_right, color: Colors.black)),
         ),
       ),
     );
