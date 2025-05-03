@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Waste2Worth',
       theme: ThemeData(
+        appBarTheme: AppBarTheme(backgroundColor: Colors.green),
         fontFamily: "Poppins",
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
         useMaterial3: true,
