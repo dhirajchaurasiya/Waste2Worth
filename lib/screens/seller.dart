@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fireflutter/providers/userprovider.dart';
 import 'package:fireflutter/widgets/locationPicker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -157,11 +158,18 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
                     ),
                     onPressed: () async {
                       if (_weightController.text.isEmpty ||
-                          _selectedLocation == null ||
                           _phoneController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Please fill in all fields!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        return;
+                      } else if (_selectedLocation == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Please select a location!'),
                             backgroundColor: Colors.green,
                           ),
                         );
@@ -233,7 +241,7 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Icon(Icons.location_on, color: Colors.black),
+                      Icon(CupertinoIcons.search, color: Colors.black),
                       const Text(
                         ' Nearby Compost Sellers:',
                         style: TextStyle(
