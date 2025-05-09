@@ -17,6 +17,7 @@ class _SellerMapState extends State<SellerMap> {
   Position? _currentPosition; // User's current location
   bool _isLoading = true; // Loading state
   var db = FirebaseFirestore.instance;
+  MapController mapController = MapController();
   List<Map<String, dynamic>> saleslist = []; // List to store sales data
 
   @override
@@ -38,6 +39,8 @@ class _SellerMapState extends State<SellerMap> {
 
       setState(() {
         saleslist = tempSalesList;
+
+        print("Sales list: $tempSalesList");
       });
 
       print("Sales details fetched successfully.");
@@ -53,6 +56,7 @@ class _SellerMapState extends State<SellerMap> {
         desiredAccuracy: LocationAccuracy.best,
         forceAndroidLocationManager: true,
       );
+      // mapController.move(LatLng(position.latitude, position.longitude), 13.0);
 
       setState(() {
         currentLocation = position;
@@ -76,6 +80,7 @@ class _SellerMapState extends State<SellerMap> {
       body: _isLoading
           ? Center(child: CircularProgressIndicator()) // Show loading spinner
           : FlutterMap(
+              mapController: mapController,
               options: MapOptions(
                 initialCenter: currentLocation != null
                     ? LatLng(
@@ -88,6 +93,27 @@ class _SellerMapState extends State<SellerMap> {
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   userAgentPackageName: 'com.example.fireflutter',
+                ),
+                Positioned(
+                  bottom: MediaQuery.of(context).size.height * 0.125,
+                  right: MediaQuery.of(context).size.width * 0.05,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      Geolocator.getCurrentPosition(
+                        desiredAccuracy: LocationAccuracy.high,
+                      ).then((value) {
+                        setState(() {
+                          currentLocation = value;
+                        });
+                        mapController.move(
+                            LatLng(currentLocation!.latitude,
+                                currentLocation!.longitude),
+                            17.0);
+                      });
+                      print("object");
+                    },
+                    child: Icon(Icons.my_location),
+                  ),
                 ),
 
                 // Marker Layer
@@ -119,6 +145,7 @@ class _SellerMapState extends State<SellerMap> {
                           .map((seller) {
                             double? lat = _parseDouble(seller['lat']);
                             double? long = _parseDouble(seller['long']);
+                            String? name = seller['name'];
 
                             if (lat != null && long != null) {
                               return Marker(
@@ -128,8 +155,9 @@ class _SellerMapState extends State<SellerMap> {
                                 child: GestureDetector(
                                   onTap: () => _showLocationDetails(
                                     context,
-                                    "Seller Location",
-                                    "Latitude: $lat, Longitude: $long",
+                                    "Seller Details",
+                                    "Name: $name\n"
+                                        "Latitude: $lat, Longitude: $long",
                                   ),
                                   child: Icon(Icons.location_on,
                                       color: Colors.blue, size: 50.0),
@@ -170,9 +198,15 @@ class _SellerMapState extends State<SellerMap> {
           title: Text(title),
           content: Text(details),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Close'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(onPressed: () {}, child: Text('View Profile')),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('Close'),
+                ),
+              ],
             ),
           ],
         );
