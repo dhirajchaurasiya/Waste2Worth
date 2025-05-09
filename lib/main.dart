@@ -27,6 +27,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Waste2Worth',
       theme: ThemeData(
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.green[300],
+        ),
         appBarTheme: AppBarTheme(backgroundColor: Colors.green),
         fontFamily: "Poppins",
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
