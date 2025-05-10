@@ -210,6 +210,7 @@ class _SellerMapState extends State<SellerMap> {
           actions: [
             TextButton(
               onPressed: () {
+                Navigator.pop(context); //close the alert dialog first
                 Navigator.push(
                   context,
                   MaterialPageRoute(
