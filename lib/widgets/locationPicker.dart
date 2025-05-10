@@ -28,6 +28,10 @@ class _LocationPickerState extends State<LocationPicker> {
 
       setState(() {
         currentLocation = position;
+        _pickedLocation = LatLng(
+          currentLocation!.latitude,
+          currentLocation!.longitude,
+        );
         _isLoading = false;
       });
 
@@ -72,8 +76,7 @@ class _LocationPickerState extends State<LocationPicker> {
                     Marker(
                       width: 80.0,
                       height: 80.0,
-                      point: LatLng(currentLocation!.latitude,
-                          currentLocation!.longitude),
+                      point: _pickedLocation,
                       child: const Icon(
                         Icons.location_on,
                         color: Colors.red,
