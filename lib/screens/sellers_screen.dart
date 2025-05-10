@@ -14,6 +14,7 @@ class SellerMap extends StatefulWidget {
 }
 
 class _SellerMapState extends State<SellerMap> {
+  String? name;
   Position? _currentPosition; // User's current location
   bool _isLoading = true; // Loading state
   var db = FirebaseFirestore.instance;
@@ -131,8 +132,10 @@ class _SellerMapState extends State<SellerMap> {
                         child: GestureDetector(
                           onTap: () => _showLocationDetails(
                             context,
-                            "Your Location",
-                            "Latitude: ${currentLocation!.latitude}, Longitude: ${currentLocation!.longitude}",
+                            {
+                              'lat': currentLocation!.latitude,
+                              'long': currentLocation!.longitude,
+                            },
                           ),
                           child: Icon(Icons.location_on,
                               color: Colors.red, size: 50.0),
@@ -146,6 +149,7 @@ class _SellerMapState extends State<SellerMap> {
                             double? lat = _parseDouble(seller['lat']);
                             double? long = _parseDouble(seller['long']);
                             String? name = seller['name'];
+                            String? phonenumber = seller['phonenumber'];
 
                             if (lat != null && long != null) {
                               return Marker(
@@ -153,12 +157,14 @@ class _SellerMapState extends State<SellerMap> {
                                 height: 80.0,
                                 point: LatLng(lat, long),
                                 child: GestureDetector(
-                                  onTap: () => _showLocationDetails(
-                                    context,
-                                    "Seller Details",
-                                    "Name: $name\n"
-                                        "Latitude: $lat, Longitude: $long",
-                                  ),
+                                  onTap: () {
+                                    _showLocationDetails(context, seller);
+                                    // _sendprofiledetails(
+                                    //     context, name, phonenumber);
+
+                                    // print("passed name to view profile: $name");
+                                    // viewProfile(name: name);
+                                  },
                                   child: Icon(Icons.location_on,
                                       color: Colors.blue, size: 50.0),
                                 ),
@@ -189,30 +195,48 @@ class _SellerMapState extends State<SellerMap> {
   }
 
   // Function to show seller location details in a popup
-  void _showLocationDetails(
-      BuildContext context, String title, String details) {
+  _showLocationDetails(
+    BuildContext context,
+    Map<String, dynamic> sellerData,
+  ) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(title),
-          content: Text(details),
+          title: Text("Seller Details"),
+          content: Text("Name: ${sellerData['name']}\n"
+              "Phone: ${sellerData['phonenumber']}\n"
+              "Location: ${sellerData['lat']}, ${sellerData['long']}"),
           actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(onPressed: () {}, child: Text('View Profile')),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text('Close'),
-                ),
-              ],
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewProfile(sellerData: sellerData),
+                  ),
+                );
+              },
+              child: Text('View Profile'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Close'),
             ),
           ],
         );
       },
     );
   }
+
+  // _sendprofiledetails(
+  //   BuildContext context,
+  //   String? name,
+  // ) {
+  //   return viewProfile(
+  //     name: name,
+  //   );
+  // }
 
   // Function to safely parse latitude and longitude values
   double? _parseDouble(dynamic value) {
@@ -228,5 +252,39 @@ class _SellerMapState extends State<SellerMap> {
       }
     }
     return null;
+  }
+}
+
+class ViewProfile extends StatelessWidget {
+  final Map<String, dynamic> sellerData;
+
+  const ViewProfile({super.key, required this.sellerData});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Seller Profile')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Name: ${sellerData['name']}', style: TextStyle(fontSize: 18)),
+            SizedBox(height: 8),
+            Text('Phone: ${sellerData['phonenumber']}'),
+            SizedBox(height: 8),
+            Text('Location: ${sellerData['lat']}, ${sellerData['long']}'),
+            SizedBox(height: 16),
+            ElevatedButton.icon(
+              icon: Icon(Icons.call),
+              label: Text('Call Seller'),
+              onPressed: () {
+                launchUrl(Uri.parse('tel:${sellerData['phonenumber']}'));
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
