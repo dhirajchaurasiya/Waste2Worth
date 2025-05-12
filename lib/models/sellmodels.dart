@@ -6,6 +6,7 @@ class sellmodel {
   double? long;
   String? weight;
   String? phonenumber;
+  String? address;
 
   sellmodel(
       {this.id,
@@ -14,14 +15,15 @@ class sellmodel {
       this.lat,
       this.long,
       this.name,
-      this.email});
+      this.email,
+      this.address});
 
   sellmodel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     weight = json['weight'];
     lat = json['lat'];
     long = json['long'];
-    // address = json['address'];
+    address = json['address'];
     name = json['name'];
     email = json['email'];
     phonenumber = json['phonenumber'];
@@ -38,7 +40,7 @@ class sellmodel {
         'weight': weight,
         'lat': lat,
         'long': long,
-        // 'address': address,
+        'address': address,
         'name': name,
         'email': email,
         'phonenumber': phonenumber
