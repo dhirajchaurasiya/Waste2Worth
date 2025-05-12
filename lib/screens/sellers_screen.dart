@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:geocoding/geocoding.dart';
 
 class SellerMap extends StatefulWidget {
   const SellerMap({super.key});
@@ -15,6 +16,7 @@ class SellerMap extends StatefulWidget {
 
 class _SellerMapState extends State<SellerMap> {
   String? name;
+  String? output;
   Position? _currentPosition; // User's current location
   bool _isLoading = true; // Loading state
   var db = FirebaseFirestore.instance;
@@ -130,13 +132,19 @@ class _SellerMapState extends State<SellerMap> {
                           currentLocation!.longitude,
                         ),
                         child: GestureDetector(
-                          onTap: () => _showLocationDetails(
-                            context,
-                            {
-                              'lat': currentLocation!.latitude,
-                              'long': currentLocation!.longitude,
-                            },
-                          ),
+                          onTap: () async {
+                            final placemarks = await placemarkFromCoordinates(
+                                currentLocation!.latitude,
+                                currentLocation!.longitude);
+                            String resolvedAddress = placemarks.isNotEmpty
+                                ? "${placemarks.first.street}, ${placemarks.first.locality}, "
+                                : "Address not found";
+
+                            print("My location: $resolvedAddress");
+                            showAboutDialog(context: context, children: [
+                              Text("My location: $resolvedAddress"),
+                            ]);
+                          },
                           child: Icon(Icons.location_on,
                               color: Colors.red, size: 50.0),
                         ),
@@ -150,6 +158,7 @@ class _SellerMapState extends State<SellerMap> {
                             double? long = _parseDouble(seller['long']);
                             String? name = seller['name'];
                             String? phonenumber = seller['phonenumber'];
+                            String? address = seller['address'];
 
                             if (lat != null && long != null) {
                               return Marker(
@@ -206,7 +215,8 @@ class _SellerMapState extends State<SellerMap> {
           title: Text("Seller Details"),
           content: Text("Name: ${sellerData['name']}\n"
               "Phone: ${sellerData['phonenumber']}\n"
-              "Location: ${sellerData['lat']}, ${sellerData['long']}"),
+              "Location: ${sellerData['lat']}, ${sellerData['long']}"
+              "Address: ${sellerData['address']}"),
           actions: [
             TextButton(
               onPressed: () {
@@ -264,27 +274,61 @@ class ViewProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Seller Profile')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Name: ${sellerData['name']}', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 8),
-            Text('Phone: ${sellerData['phonenumber']}'),
-            SizedBox(height: 8),
-            Text('Location: ${sellerData['lat']}, ${sellerData['long']}'),
-            SizedBox(height: 16),
-            ElevatedButton.icon(
-              icon: Icon(Icons.call),
-              label: Text('Call Seller'),
-              onPressed: () {
-                launchUrl(Uri.parse('tel:${sellerData['phonenumber']}'));
-              },
-            ),
-          ],
-        ),
+      appBar: AppBar(title: Text('View Profile')),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              Container(
+                  height: 80,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                  )),
+              Container(
+                height: 80,
+                width: double.infinity,
+                child: Center(
+                  child: Text(
+                    sellerData['name'],
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(children: [
+              Text('Name: ${sellerData['name']}',
+                  style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 8),
+              Text('Phone: ${sellerData['phonenumber']}'),
+              const SizedBox(height: 8),
+              Text('Location: ${sellerData['lat']}, ${sellerData['long']}'),
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                icon: Icon(Icons.call),
+                label: Text('Call Seller'),
+                onPressed: () {
+                  launchUrl(Uri.parse('tel:${sellerData['phonenumber']}'));
+                },
+              ),
+              ListTile(
+                  leading: Icon(Icons.email),
+                  title: Text('Email'),
+                  subtitle: Text(sellerData['email']),
+                  onTap: () {
+                    launchUrl(Uri.parse('mailto:${sellerData['email']}'));
+                  })
+            ]),
+          ),
+        ],
       ),
     );
   }

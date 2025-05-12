@@ -5,6 +5,7 @@ import 'package:fireflutter/widgets/locationPicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 // import 'package:url_launcher/url_launcher.dart';
@@ -19,6 +20,7 @@ class BuyerSellerScreen extends StatefulWidget {
 
 class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
   LatLng? _selectedLocation;
+  String? _output;
 
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -176,6 +178,16 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
                         return;
                       }
 
+                      final placemarks = await placemarkFromCoordinates(
+                          _selectedLocation!.latitude,
+                          _selectedLocation!.longitude);
+                      String resolvedAddress = placemarks.isNotEmpty
+                          ? "${placemarks.first.street}, ${placemarks.first.locality}"
+                          : "Address not found";
+
+                      print(
+                          "Resolved Address after placemark: $resolvedAddress");
+
                       /// create new object of model (making sure kun field ma kasto value janxa - controller le dekhayejsto)
                       final newsale = sellmodel(
                           id: DateTime.now().toString(),
@@ -184,7 +196,8 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
                           long: _selectedLocation!.longitude,
                           email: userprovider.userEmail,
                           name: userprovider.userName,
-                          phonenumber: _phoneController.text);
+                          phonenumber: _phoneController.text,
+                          address: resolvedAddress);
 
                       //add data to the firebase
                       await FirebaseFirestore.instance
@@ -192,7 +205,7 @@ class _BuyerSellerScreenState extends State<BuyerSellerScreen> {
                           .add(newsale.toJson());
 
                       print('Weight: ${_weightController.text} kg');
-                      print('Address: ${_addressController.text}');
+                      print('Address: ${_output}');
                       print('Location: ${_selectedLocation}');
                       print('Phone: ${_phoneController.text}');
                       ScaffoldMessenger.of(context).showSnackBar(
