@@ -105,7 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         title: 'Gas Levels',
                         value: gasLevel,
                         icon: Icons.cloud,
-                        color: Colors.grey,
+                        color: Colors.grey.shade600,
                       ),
                     ],
                   ),
