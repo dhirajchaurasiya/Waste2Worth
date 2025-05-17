@@ -47,6 +47,7 @@ dependencies:
   esewa_flutter_sdk: 
     path: ./esewa_sdk/esewa_flutter_sdk
   lottie: ^3.2.0
+  firebase_database: ^11.3.5
 
 dev_dependencies:
   flutter_test:
