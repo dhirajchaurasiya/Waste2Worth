@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fireflutter/providers/userprovider.dart';
 import 'package:fireflutter/screens/profile.dart';
 import 'package:flutter/material.dart';
@@ -17,111 +18,104 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   var user = FirebaseAuth.instance.currentUser;
   var db = FirebaseFirestore.instance;
+  final DatabaseReference sensorRef =
+      FirebaseDatabase.instance.ref().child('sensorData/current');
 
   @override
   Widget build(BuildContext context) {
     var userprovider = Provider.of<Userprovider>(context);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Welcome Header
-              Text('Welcome ${userprovider.userName}!'),
-              Text(
-                'Current Compost Status',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 16),
+      body: StreamBuilder<DatabaseEvent>(
+        stream: sensorRef.onValue,
+        builder: (context, snapshot) {
+          final data = snapshot.data?.snapshot.value as Map? ?? {};
 
-              // Sensor Data Widgets
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SensorWidget(
-                    title: 'Temperature',
-                    value: '35°C',
-                    icon: Icons.thermostat,
-                    color: Colors.orange,
-                  ),
-                  SensorWidget(
-                    title: 'Humidity',
-                    value: '55%',
-                    icon: Icons.water_drop,
-                    color: Colors.blue,
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SensorWidget(
-                    title: 'pH Level',
-                    value: '6.8',
-                    icon: Icons.science,
-                    color: Colors.green,
-                  ),
-                  SensorWidget(
-                    title: 'Gas Levels',
-                    value: 'Low',
-                    icon: Icons.cloud,
-                    color: Colors.grey,
-                  ),
-                ],
-              ),
+          final temperature = data['temperature']?.toStringAsFixed(1) ?? '--';
+          final humidity = data['humidity']?.toStringAsFixed(1) ?? '--';
+          final ph = data['ph']?.toStringAsFixed(1) ?? '--';
+          final gasLevel = data['co2'] != null || data['nh3'] != null
+              ? 'CO₂: ${data['co2']?.toStringAsFixed(1) ?? '--'}, NH₃: ${data['nh3']?.toStringAsFixed(1) ?? '--'}'
+              : 'Low';
 
-              SizedBox(height: 32),
-
-              // Tips Container
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.lightGreen[100],
-                  borderRadius: BorderRadius.circular(8),
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text('Welcome ${userprovider.userName}!'),
+                Text(
+                  'Current Compost Status',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      'Composting Tips',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green[900],
-                      ),
+                    SensorWidget(
+                      title: 'Temperature',
+                      value: '$temperature °C',
+                      icon: Icons.thermostat,
+                      color: Colors.orange,
                     ),
-                    SizedBox(height: 8),
-                    Text(
-                        '1. Maintain temperature between 35-50°C for optimal decomposition.'),
-                    Text('2. Ensure humidity stays between 40-60%.'),
-                    Text('3. Regularly mix the compost to keep it aerated.'),
-                    Text(
-                        '4. Add a thin membrane of soil daily to prevent odor.'),
-                    Text(
-                        '5. Include dry leaves or sawdust for proper carbon-to-nitrogen balance.'),
+                    SensorWidget(
+                      title: 'Humidity',
+                      value: '$humidity %',
+                      icon: Icons.water_drop,
+                      color: Colors.blue,
+                    ),
                   ],
                 ),
-              ),
-              // Center(
-              //   child: ElevatedButton(
-              //     onPressed: () {
-              //       // Navigator.push(
-              //       //   context,
-              //       //   MaterialPageRoute(builder: (context) => SellerScreen()),
-              //       // );
-              //       print("Sell Compost Manure");
-              //     },
-              //     child: Text('Sell Compost Manure'),
-              //   ),
-              // ),
-            ],
-          ),
-        ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SensorWidget(
+                      title: 'pH Level',
+                      value: ph,
+                      icon: Icons.science,
+                      color: Colors.green,
+                    ),
+                    SensorWidget(
+                      title: 'Gas Levels',
+                      value: gasLevel,
+                      icon: Icons.cloud,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 32),
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.lightGreen[100],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Composting Tips',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green[900])),
+                      SizedBox(height: 8),
+                      Text(
+                          '1. Maintain temperature between 35-50°C for optimal decomposition.'),
+                      Text('2. Ensure humidity stays between 40-60%.'),
+                      Text('3. Regularly mix the compost to keep it aerated.'),
+                      Text(
+                          '4. Add a thin membrane of soil daily to prevent odor.'),
+                      Text(
+                          '5. Include dry leaves or sawdust for proper carbon-to-nitrogen balance.'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
